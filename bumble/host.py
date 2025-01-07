@@ -735,6 +735,8 @@ class Host(AbortableEventEmitter):
         ):
             if connection := self.connections.get(connection_handle):
                 connection.acl_packet_queue.on_packets_completed(num_completed_packets)
+            elif self.cis_links.get(connection_handle):
+                self.emit('iso_packet_sent',event.num_completed_packets)
             elif connection_handle not in itertools.chain(
                 self.cis_links.keys(),
                 self.sco_links.keys(),
