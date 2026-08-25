@@ -6199,7 +6199,7 @@ class HCI_LE_CS_Create_Config_Command(HCI_AsyncCommand):
     # Bluetooth 6.3 CS Enhancements — last byte of the command was called
     # "reserved" pre-6.3. Bit 0 (`CsEnhancements1.INLINE_PCT`) enables Inline
     # PCT transfer on this CS configuration. Set to zero for 6.0 behavior.
-    cs_enhancements_1: int = field(default=0, metadata=metadata(1))
+    cs_enhancements_1: int = field(metadata=metadata(1))
 
 
 # -----------------------------------------------------------------------------
