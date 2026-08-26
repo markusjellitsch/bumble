@@ -34,8 +34,7 @@ from bumble.sdp import (
     DataElement,
     ServiceAttribute,
 )
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # pylint: disable=invalid-name

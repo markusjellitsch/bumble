@@ -17,8 +17,7 @@ import pytest
 
 from bumble import device as device_module
 from bumble.profiles import battery_service
-
-from . import test_utils
+from bumble.testing import test_utils
 
 
 # -----------------------------------------------------------------------------

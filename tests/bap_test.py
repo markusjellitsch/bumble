@@ -55,7 +55,7 @@ from bumble.profiles.pacs import (
     PublishedAudioCapabilitiesService,
     PublishedAudioCapabilitiesServiceProxy,
 )
-from tests.test_utils import TwoDevices, async_barrier
+from bumble.testing.test_utils import TwoDevices, async_barrier
 
 # -----------------------------------------------------------------------------
 # Logging

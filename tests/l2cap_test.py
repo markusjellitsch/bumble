@@ -26,8 +26,7 @@ from unittest import mock
 import pytest
 
 from bumble import core, l2cap
-
-from .test_utils import TwoDevices, async_barrier
+from bumble.testing.test_utils import TwoDevices, async_barrier
 
 # -----------------------------------------------------------------------------
 # Logging

@@ -53,8 +53,7 @@ from bumble.hci import (
     Role,
 )
 from bumble.host import DataPacketQueue, Host
-
-from .test_utils import TwoDevices, async_barrier
+from bumble.testing.test_utils import TwoDevices, async_barrier
 
 # -----------------------------------------------------------------------------
 # Constants
