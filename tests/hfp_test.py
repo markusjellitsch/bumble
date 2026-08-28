@@ -23,8 +23,7 @@ import pytest
 import pytest_asyncio
 
 from bumble import core, hci, hfp, rfcomm
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

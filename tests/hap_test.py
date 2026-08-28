@@ -25,8 +25,7 @@ import pytest_asyncio
 from bumble import att, device
 from bumble.keys import PairingKeys
 from bumble.profiles import hap
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

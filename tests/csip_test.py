@@ -25,8 +25,7 @@ import pytest
 
 from bumble import device
 from bumble.profiles import csip
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

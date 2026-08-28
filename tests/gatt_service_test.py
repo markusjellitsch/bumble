@@ -21,8 +21,7 @@ import pytest
 
 from bumble import device, gatt
 from bumble.profiles import gatt_service
-
-from . import test_utils
+from bumble.testing import test_utils
 
 
 # -----------------------------------------------------------------------------

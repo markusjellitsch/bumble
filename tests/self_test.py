@@ -33,8 +33,7 @@ from bumble.smp import (
     OobContext,
     OobLegacyContext,
 )
-
-from .test_utils import TwoDevices, async_barrier
+from bumble.testing.test_utils import TwoDevices, async_barrier
 
 # -----------------------------------------------------------------------------
 # Logging

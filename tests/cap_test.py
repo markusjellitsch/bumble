@@ -23,8 +23,7 @@ import pytest
 
 from bumble import device, gatt
 from bumble.profiles import cap, csip
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

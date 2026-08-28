@@ -22,8 +22,7 @@ import pytest_asyncio
 
 from bumble import device
 from bumble.profiles import vcs
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

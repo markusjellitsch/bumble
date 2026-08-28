@@ -54,7 +54,7 @@ from bumble.hci import (
 )
 from bumble.host import DataPacketQueue, Host
 from bumble.pairing import PairingConfig, PairingDelegate
-from .test_utils import TwoDevices, async_barrier
+from bumble.testing.test_utils import TwoDevices, async_barrier
 
 # -----------------------------------------------------------------------------
 # Constants

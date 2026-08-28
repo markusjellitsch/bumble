@@ -25,8 +25,7 @@ from unittest import mock
 import pytest
 
 from bumble import avc, avctp, avrcp
-
-from . import test_utils
+from bumble.testing import test_utils
 
 
 # -----------------------------------------------------------------------------

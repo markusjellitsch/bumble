@@ -32,8 +32,7 @@ from bumble.profiles.aics import (
     Mute,
 )
 from bumble.profiles.vcs import VolumeControlService, VolumeControlServiceProxy
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Tests

@@ -20,8 +20,7 @@ import pytest
 
 from bumble import device as bumble_device
 from bumble.profiles import asha
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 HI_SYNC_ID = b'\x00\x01\x02\x03\x04\x05\x06\x07'

@@ -34,8 +34,7 @@ from bumble.profiles.vocs import (
     VolumeOffsetControlServiceProxy,
     VolumeOffsetState,
 )
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Tests

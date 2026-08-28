@@ -30,8 +30,7 @@ from bumble.rfcomm import (
     find_rfcomm_channels,
     make_service_sdp_records,
 )
-
-from . import test_utils
+from bumble.testing import test_utils
 
 _TIMEOUT = 0.1
 

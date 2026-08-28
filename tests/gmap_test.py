@@ -29,8 +29,7 @@ from bumble.profiles.gmap import (
     UggFeatures,
     UgtFeatures,
 )
-
-from .test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Tests

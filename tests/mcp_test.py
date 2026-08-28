@@ -25,7 +25,7 @@ import pytest_asyncio
 
 from bumble import device
 from bumble.profiles import mcp
-from tests.test_utils import TwoDevices
+from bumble.testing.test_utils import TwoDevices
 
 # -----------------------------------------------------------------------------
 # Logging

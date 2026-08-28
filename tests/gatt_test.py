@@ -64,8 +64,7 @@ from bumble.gatt_adapters import (
     UTF8CharacteristicAdapter,
     UTF8CharacteristicProxyAdapter,
 )
-
-from .test_utils import Devices, TwoDevices, async_barrier
+from bumble.testing.test_utils import Devices, TwoDevices, async_barrier
 
 
 # -----------------------------------------------------------------------------
