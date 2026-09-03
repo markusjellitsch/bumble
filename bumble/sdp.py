@@ -22,7 +22,7 @@ import logging
 import struct
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, ClassVar, NewType, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, TypeAlias, TypeVar
 
 from typing_extensions import Self
 
@@ -1076,7 +1076,7 @@ class Client:
 class Server:
     CONTINUATION_STATE = bytes([0x01, 0x00])
     channel: l2cap.ClassicChannel | None
-    Service = NewType('Service', list[ServiceAttribute])
+    Service: TypeAlias = list[ServiceAttribute]
     service_records: dict[int, Service]
     current_response: None | bytes | tuple[int, list[int]]
 

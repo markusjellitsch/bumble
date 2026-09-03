@@ -2644,11 +2644,13 @@ class Device(utils.CompositeEventEmitter):
             host.link_key_provider = self.get_link_key
 
     @property
-    def sdp_service_records(self):
+    def sdp_service_records(self) -> dict[int, sdp.Server.Service]:
         return self.sdp_server.service_records
 
     @sdp_service_records.setter
-    def sdp_service_records(self, service_records):
+    def sdp_service_records(
+        self, service_records: dict[int, sdp.Server.Service]
+    ) -> None:
         self.sdp_server.service_records = service_records
 
     def lookup_connection(self, connection_handle: int) -> Connection | None:
