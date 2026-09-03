@@ -25,6 +25,7 @@ from collections.abc import Iterable
 from typing import (
     Any,
     ClassVar,
+    Final,
     Literal,
     cast,
     overload,
@@ -1654,66 +1655,66 @@ class AdvertisingData:
         SIMULTANEOUS_LE_BR_EDR_CAPABLE = 1 << 3
 
     # For backward-compatibility
-    FLAGS                                            = Type.FLAGS
-    INCOMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS    = Type.INCOMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS
-    COMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS      = Type.COMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS
-    INCOMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS    = Type.INCOMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS
-    COMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS      = Type.COMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS
-    INCOMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS   = Type.INCOMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS
-    COMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS     = Type.COMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS
-    SHORTENED_LOCAL_NAME                             = Type.SHORTENED_LOCAL_NAME
-    COMPLETE_LOCAL_NAME                              = Type.COMPLETE_LOCAL_NAME
-    TX_POWER_LEVEL                                   = Type.TX_POWER_LEVEL
-    CLASS_OF_DEVICE                                  = Type.CLASS_OF_DEVICE
-    SIMPLE_PAIRING_HASH_C                            = Type.SIMPLE_PAIRING_HASH_C
-    SIMPLE_PAIRING_HASH_C_192                        = Type.SIMPLE_PAIRING_HASH_C_192
-    SIMPLE_PAIRING_RANDOMIZER_R                      = Type.SIMPLE_PAIRING_RANDOMIZER_R
-    SIMPLE_PAIRING_RANDOMIZER_R_192                  = Type.SIMPLE_PAIRING_RANDOMIZER_R_192
-    DEVICE_ID                                        = Type.DEVICE_ID
-    SECURITY_MANAGER_TK_VALUE                        = Type.SECURITY_MANAGER_TK_VALUE
-    SECURITY_MANAGER_OUT_OF_BAND_FLAGS               = Type.SECURITY_MANAGER_OUT_OF_BAND_FLAGS
-    PERIPHERAL_CONNECTION_INTERVAL_RANGE             = Type.PERIPHERAL_CONNECTION_INTERVAL_RANGE
-    LIST_OF_16_BIT_SERVICE_SOLICITATION_UUIDS        = Type.LIST_OF_16_BIT_SERVICE_SOLICITATION_UUIDS
-    LIST_OF_128_BIT_SERVICE_SOLICITATION_UUIDS       = Type.LIST_OF_128_BIT_SERVICE_SOLICITATION_UUIDS
-    SERVICE_DATA                                     = Type.SERVICE_DATA_16_BIT_UUID
-    SERVICE_DATA_16_BIT_UUID                         = Type.SERVICE_DATA_16_BIT_UUID
-    PUBLIC_TARGET_ADDRESS                            = Type.PUBLIC_TARGET_ADDRESS
-    RANDOM_TARGET_ADDRESS                            = Type.RANDOM_TARGET_ADDRESS
-    APPEARANCE                                       = Type.APPEARANCE
-    ADVERTISING_INTERVAL                             = Type.ADVERTISING_INTERVAL
-    LE_BLUETOOTH_DEVICE_ADDRESS                      = Type.LE_BLUETOOTH_DEVICE_ADDRESS
-    LE_ROLE                                          = Type.LE_ROLE
-    SIMPLE_PAIRING_HASH_C_256                        = Type.SIMPLE_PAIRING_HASH_C_256
-    SIMPLE_PAIRING_RANDOMIZER_R_256                  = Type.SIMPLE_PAIRING_RANDOMIZER_R_256
-    LIST_OF_32_BIT_SERVICE_SOLICITATION_UUIDS        = Type.LIST_OF_32_BIT_SERVICE_SOLICITATION_UUIDS
-    SERVICE_DATA_32_BIT_UUID                         = Type.SERVICE_DATA_32_BIT_UUID
-    SERVICE_DATA_128_BIT_UUID                        = Type.SERVICE_DATA_128_BIT_UUID
-    LE_SECURE_CONNECTIONS_CONFIRMATION_VALUE         = Type.LE_SECURE_CONNECTIONS_CONFIRMATION_VALUE
-    LE_SECURE_CONNECTIONS_RANDOM_VALUE               = Type.LE_SECURE_CONNECTIONS_RANDOM_VALUE
-    URI                                              = Type.URI
-    INDOOR_POSITIONING                               = Type.INDOOR_POSITIONING
-    TRANSPORT_DISCOVERY_DATA                         = Type.TRANSPORT_DISCOVERY_DATA
-    LE_SUPPORTED_FEATURES                            = Type.LE_SUPPORTED_FEATURES
-    CHANNEL_MAP_UPDATE_INDICATION                    = Type.CHANNEL_MAP_UPDATE_INDICATION
-    PB_ADV                                           = Type.PB_ADV
-    MESH_MESSAGE                                     = Type.MESH_MESSAGE
-    MESH_BEACON                                      = Type.MESH_BEACON
-    BIGINFO                                          = Type.BIGINFO
-    BROADCAST_CODE                                   = Type.BROADCAST_CODE
-    RESOLVABLE_SET_IDENTIFIER                        = Type.RESOLVABLE_SET_IDENTIFIER
-    ADVERTISING_INTERVAL_LONG                        = Type.ADVERTISING_INTERVAL_LONG
-    BROADCAST_NAME                                   = Type.BROADCAST_NAME
-    ENCRYPTED_ADVERTISING_DATA                       = Type.ENCRYPTED_ADVERTISING_DATA
-    PERIODIC_ADVERTISING_RESPONSE_TIMING_INFORMATION = Type.PERIODIC_ADVERTISING_RESPONSE_TIMING_INFORMATION
-    ELECTRONIC_SHELF_LABEL                           = Type.ELECTRONIC_SHELF_LABEL
-    THREE_D_INFORMATION_DATA                         = Type.THREE_D_INFORMATION_DATA
-    MANUFACTURER_SPECIFIC_DATA                       = Type.MANUFACTURER_SPECIFIC_DATA
+    FLAGS: Final                                            = Type.FLAGS
+    INCOMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS: Final    = Type.INCOMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS
+    COMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS: Final      = Type.COMPLETE_LIST_OF_16_BIT_SERVICE_CLASS_UUIDS
+    INCOMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS: Final    = Type.INCOMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS
+    COMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS: Final      = Type.COMPLETE_LIST_OF_32_BIT_SERVICE_CLASS_UUIDS
+    INCOMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS: Final   = Type.INCOMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS
+    COMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS: Final     = Type.COMPLETE_LIST_OF_128_BIT_SERVICE_CLASS_UUIDS
+    SHORTENED_LOCAL_NAME: Final                             = Type.SHORTENED_LOCAL_NAME
+    COMPLETE_LOCAL_NAME: Final                              = Type.COMPLETE_LOCAL_NAME
+    TX_POWER_LEVEL: Final                                   = Type.TX_POWER_LEVEL
+    CLASS_OF_DEVICE: Final                                  = Type.CLASS_OF_DEVICE
+    SIMPLE_PAIRING_HASH_C: Final                            = Type.SIMPLE_PAIRING_HASH_C
+    SIMPLE_PAIRING_HASH_C_192: Final                        = Type.SIMPLE_PAIRING_HASH_C_192
+    SIMPLE_PAIRING_RANDOMIZER_R: Final                      = Type.SIMPLE_PAIRING_RANDOMIZER_R
+    SIMPLE_PAIRING_RANDOMIZER_R_192: Final                  = Type.SIMPLE_PAIRING_RANDOMIZER_R_192
+    DEVICE_ID: Final                                        = Type.DEVICE_ID
+    SECURITY_MANAGER_TK_VALUE: Final                        = Type.SECURITY_MANAGER_TK_VALUE
+    SECURITY_MANAGER_OUT_OF_BAND_FLAGS: Final               = Type.SECURITY_MANAGER_OUT_OF_BAND_FLAGS
+    PERIPHERAL_CONNECTION_INTERVAL_RANGE: Final             = Type.PERIPHERAL_CONNECTION_INTERVAL_RANGE
+    LIST_OF_16_BIT_SERVICE_SOLICITATION_UUIDS: Final        = Type.LIST_OF_16_BIT_SERVICE_SOLICITATION_UUIDS
+    LIST_OF_128_BIT_SERVICE_SOLICITATION_UUIDS: Final       = Type.LIST_OF_128_BIT_SERVICE_SOLICITATION_UUIDS
+    SERVICE_DATA: Final                                     = Type.SERVICE_DATA_16_BIT_UUID
+    SERVICE_DATA_16_BIT_UUID: Final                         = Type.SERVICE_DATA_16_BIT_UUID
+    PUBLIC_TARGET_ADDRESS: Final                            = Type.PUBLIC_TARGET_ADDRESS
+    RANDOM_TARGET_ADDRESS: Final                            = Type.RANDOM_TARGET_ADDRESS
+    APPEARANCE: Final                                       = Type.APPEARANCE
+    ADVERTISING_INTERVAL: Final                             = Type.ADVERTISING_INTERVAL
+    LE_BLUETOOTH_DEVICE_ADDRESS: Final                      = Type.LE_BLUETOOTH_DEVICE_ADDRESS
+    LE_ROLE: Final                                          = Type.LE_ROLE
+    SIMPLE_PAIRING_HASH_C_256: Final                        = Type.SIMPLE_PAIRING_HASH_C_256
+    SIMPLE_PAIRING_RANDOMIZER_R_256: Final                  = Type.SIMPLE_PAIRING_RANDOMIZER_R_256
+    LIST_OF_32_BIT_SERVICE_SOLICITATION_UUIDS: Final        = Type.LIST_OF_32_BIT_SERVICE_SOLICITATION_UUIDS
+    SERVICE_DATA_32_BIT_UUID: Final                         = Type.SERVICE_DATA_32_BIT_UUID
+    SERVICE_DATA_128_BIT_UUID: Final                        = Type.SERVICE_DATA_128_BIT_UUID
+    LE_SECURE_CONNECTIONS_CONFIRMATION_VALUE: Final         = Type.LE_SECURE_CONNECTIONS_CONFIRMATION_VALUE
+    LE_SECURE_CONNECTIONS_RANDOM_VALUE: Final               = Type.LE_SECURE_CONNECTIONS_RANDOM_VALUE
+    URI: Final                                              = Type.URI
+    INDOOR_POSITIONING: Final                               = Type.INDOOR_POSITIONING
+    TRANSPORT_DISCOVERY_DATA: Final                         = Type.TRANSPORT_DISCOVERY_DATA
+    LE_SUPPORTED_FEATURES: Final                            = Type.LE_SUPPORTED_FEATURES
+    CHANNEL_MAP_UPDATE_INDICATION: Final                    = Type.CHANNEL_MAP_UPDATE_INDICATION
+    PB_ADV: Final                                           = Type.PB_ADV
+    MESH_MESSAGE: Final                                     = Type.MESH_MESSAGE
+    MESH_BEACON: Final                                      = Type.MESH_BEACON
+    BIGINFO: Final                                          = Type.BIGINFO
+    BROADCAST_CODE: Final                                   = Type.BROADCAST_CODE
+    RESOLVABLE_SET_IDENTIFIER: Final                        = Type.RESOLVABLE_SET_IDENTIFIER
+    ADVERTISING_INTERVAL_LONG: Final                        = Type.ADVERTISING_INTERVAL_LONG
+    BROADCAST_NAME: Final                                   = Type.BROADCAST_NAME
+    ENCRYPTED_ADVERTISING_DATA: Final                       = Type.ENCRYPTED_ADVERTISING_DATA
+    PERIODIC_ADVERTISING_RESPONSE_TIMING_INFORMATION: Final = Type.PERIODIC_ADVERTISING_RESPONSE_TIMING_INFORMATION
+    ELECTRONIC_SHELF_LABEL: Final                           = Type.ELECTRONIC_SHELF_LABEL
+    THREE_D_INFORMATION_DATA: Final                         = Type.THREE_D_INFORMATION_DATA
+    MANUFACTURER_SPECIFIC_DATA: Final                       = Type.MANUFACTURER_SPECIFIC_DATA
 
-    LE_LIMITED_DISCOVERABLE_MODE_FLAG = Flags.LE_LIMITED_DISCOVERABLE_MODE
-    LE_GENERAL_DISCOVERABLE_MODE_FLAG = Flags.LE_GENERAL_DISCOVERABLE_MODE
-    BR_EDR_NOT_SUPPORTED_FLAG         = Flags.BR_EDR_NOT_SUPPORTED
-    BR_EDR_CONTROLLER_FLAG            = Flags.SIMULTANEOUS_LE_BR_EDR_CAPABLE
-    BR_EDR_HOST_FLAG                  = 0x10 # Deprecated
+    LE_LIMITED_DISCOVERABLE_MODE_FLAG: Final = Flags.LE_LIMITED_DISCOVERABLE_MODE
+    LE_GENERAL_DISCOVERABLE_MODE_FLAG: Final = Flags.LE_GENERAL_DISCOVERABLE_MODE
+    BR_EDR_NOT_SUPPORTED_FLAG: Final         = Flags.BR_EDR_NOT_SUPPORTED
+    BR_EDR_CONTROLLER_FLAG: Final            = Flags.SIMULTANEOUS_LE_BR_EDR_CAPABLE
+    BR_EDR_HOST_FLAG: Final                  = 0x10 # Deprecated
 
     ad_structures: list[tuple[AdvertisingData.Type, bytes]]
 
