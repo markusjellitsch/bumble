@@ -985,10 +985,10 @@ class CsSubfeature(enum.IntFlag):
     CS_IPT_REFLECTOR = 1 << 4   # Inline PCT capable as reflector
 
 
-# Values for the `cs_enhancements_1` byte of HCI_LE_CS_Create_Config command.
-# Bit 0 enables Inline PCT transfer on the CS configuration; other bits
-# reserved. Mirrors Zephyr conn.h:851-855 semantics.
-class CsEnhancements1(enum.IntFlag):
+# Values for the `cs_enhancements` byte of HCI_LE_CS_Create_Config command.
+# See Bluetooth spec @ 7.8.137: bit 0 enables IPT in the CS reflector; the
+# other bits are reserved.
+class CsEnhancements(enum.IntFlag):
     INLINE_PCT = 0x01
 
 class Role(SpecableEnum):
@@ -6201,9 +6201,9 @@ class HCI_LE_CS_Create_Config_Command(HCI_AsyncCommand):
     ch3c_shape: int = field(metadata=Ch3cShape.type_metadata(1))
     ch3c_jump: int = field(metadata=metadata(1))
     # Bluetooth 6.3 CS Enhancements — last byte of the command was called
-    # "reserved" pre-6.3. Bit 0 (`CsEnhancements1.INLINE_PCT`) enables Inline
-    # PCT transfer on this CS configuration. Set to zero for 6.0 behavior.
-    cs_enhancements_1: int = field(metadata=metadata(1))
+    # "reserved" pre-6.3. Bit 0 (`CsEnhancements.INLINE_PCT`) enables IPT in
+    # the CS reflector. Set to zero for 6.0 behavior.
+    cs_enhancements: int = field(metadata=metadata(1))
 
 
 # -----------------------------------------------------------------------------

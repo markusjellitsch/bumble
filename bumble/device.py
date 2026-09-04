@@ -5517,7 +5517,7 @@ class Device(utils.CompositeEventEmitter):
         channel_selection_type: int = hci.HCI_LE_CS_Create_Config_Command.ChannelSelectionType.ALGO_3B,
         ch3c_shape: int = hci.HCI_LE_CS_Create_Config_Command.Ch3cShape.HAT,
         ch3c_jump: int = 0x03,
-        cs_enhancements_1: int = 0x00,
+        cs_enhancements: int = 0x00,
     ) -> ChannelSoundingConfig:
         complete_future: asyncio.Future[ChannelSoundingConfig] = (
             asyncio.get_running_loop().create_future()
@@ -5563,7 +5563,7 @@ class Device(utils.CompositeEventEmitter):
                     channel_selection_type=channel_selection_type,
                     ch3c_shape=ch3c_shape,
                     ch3c_jump=ch3c_jump,
-                    cs_enhancements_1=cs_enhancements_1,
+                    cs_enhancements=cs_enhancements,
                 )
             )
             return await complete_future
