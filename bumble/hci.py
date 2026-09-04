@@ -6065,9 +6065,9 @@ class HCI_LE_CS_Read_Local_Supported_Capabilities_V2_Command(
     HCI_SyncCommand[HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters]
 ):
     '''
-    See Bluetooth spec @ 7.8.161 LE CS Read Local Supported Capabilities V2 command
-    (opcode 0x20A5). Introduced with LE Extended Feature Set / CS Enhancements
-    to report Inline PCT (IPT) timing capabilities.
+    See Bluetooth spec @ 7.8.130 LE CS Read Local Supported Capabilities
+    command [v2] (opcode 0x20A5). Introduced with LE Extended Feature Set /
+    CS Enhancements to report Inline PCT (IPT) timing capabilities.
     '''
 
 
@@ -7331,8 +7331,8 @@ class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_Event(HCI_LE_Meta_Ev
 @dataclasses.dataclass
 class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event(HCI_LE_Meta_Event):
     '''
-    See Bluetooth spec @ 7.7.65.65 LE CS Read Remote Supported Capabilities
-    Complete V2 event (subevent 0x38). Emitted (instead of the 6.0 variant
+    See Bluetooth spec @ 7.7.65.39 LE CS Read Remote Supported Capabilities
+    Complete event [v2] (subevent 0x38). Emitted (instead of the 6.0 variant
     0x2C) when the LE Extended Feature Set has been negotiated on the link.
     Adds the T_IP2_IPT and T_SW_IPT timings for Inline PCT plus the 2M RTT
     sequence lengths.
