@@ -1190,13 +1190,15 @@ class ChannelSoundingCapabilities:
     t_sw_time_supported: int
     tx_snr_capability: int
     # Bluetooth 6.3 [v2] additions from LE CS Read Local Supported
-    # Capabilities V2 (opcode 0x20A5). Populated when the local controller
+    # Capabilities [v2] (opcode 0x20A5). Populated when the local controller
     # supports the V2 command; zero otherwise. `cs_ipt_reflector_supported`
     # is a derived boolean from `subfeatures_supported` bit 4 (the
-    # CS_IPT_REFLECTOR subfeature mask per Bluetooth Core Spec / Nordic
-    # hci_types.h:3934-3935).
+    # CS_IPT_REFLECTOR subfeature mask).
     t_ip2_ipt_times_supported: int = 0
-    t_sw_ipt_time_supported: int = 0
+    t_sw_ipt_times_supported: int = 0
+    rtt_2m_aa_only_n: int = 0
+    rtt_2m_sounding_n: int = 0
+    rtt_2m_random_sequence_n: int = 0
     cs_ipt_reflector_supported: bool = False
 
     @classmethod
@@ -1212,22 +1214,25 @@ class ChannelSoundingCapabilities:
         """Build capabilities from either the 6.0 or the 6.3 [v2] HCI payload.
 
         The V2 shapes rename rtt_random_sequence_n to rtt_random_payload_n and
-        append the Inline PCT timings; everything else is common to all four.
+        append the Inline PCT timings and 2M RTT sequence lengths; everything
+        else is common to all four.
         """
+        v2_tail: dict[str, int] = {}
         if isinstance(
             report,
-            (
-                hci.HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters,
-                hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event,
-            ),
+            hci.HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters
+            | hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event,
         ):
             rtt_random_sequence_n = report.rtt_random_payload_n
-            t_ip2_ipt_times_supported = report.t_ip2_ipt_times_supported
-            t_sw_ipt_time_supported = report.t_sw_ipt_time_supported
+            v2_tail = {
+                't_ip2_ipt_times_supported': report.t_ip2_ipt_times_supported,
+                't_sw_ipt_times_supported': report.t_sw_ipt_times_supported,
+                'rtt_2m_aa_only_n': report.rtt_2m_aa_only_n,
+                'rtt_2m_sounding_n': report.rtt_2m_sounding_n,
+                'rtt_2m_random_sequence_n': report.rtt_2m_random_sequence_n,
+            }
         else:
             rtt_random_sequence_n = report.rtt_random_sequence_n
-            t_ip2_ipt_times_supported = 0
-            t_sw_ipt_time_supported = 0
 
         return cls(
             num_config_supported=report.num_config_supported,
@@ -1250,11 +1255,10 @@ class ChannelSoundingCapabilities:
             t_pm_times_supported=report.t_pm_times_supported,
             t_sw_time_supported=report.t_sw_time_supported,
             tx_snr_capability=report.tx_snr_capability,
-            t_ip2_ipt_times_supported=t_ip2_ipt_times_supported,
-            t_sw_ipt_time_supported=t_sw_ipt_time_supported,
             cs_ipt_reflector_supported=bool(
                 report.subfeatures_supported & hci.CsSubfeature.CS_IPT_REFLECTOR
             ),
+            **v2_tail,
         )
 
 

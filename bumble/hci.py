@@ -6021,8 +6021,9 @@ class HCI_LE_CS_Read_Local_Supported_Capabilities_Command(
 
 # -----------------------------------------------------------------------------
 # Bluetooth 6.3 LE Extended Feature Set — CS Enhancements (V2 variant).
-# Adds Inline PCT (IPT) timings after tx_snr_capability. Opcode 0x20A5.
-# See Nordic hci_types.h §2607-2660 for the reference struct.
+# Adds the Inline PCT (IPT) timings and the 2M RTT sequence lengths after
+# tx_snr_capability. Opcode 0x20A5. See Bluetooth spec @ 7.8.130 for the
+# parameter list.
 # -----------------------------------------------------------------------------
 @dataclasses.dataclass
 class HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters(
@@ -6050,7 +6051,10 @@ class HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters(
     tx_snr_capability: int = field(metadata=metadata(CS_SNR_SPEC))
     # V2 tail.
     t_ip2_ipt_times_supported: int = field(metadata=metadata(2))
-    t_sw_ipt_time_supported: int = field(metadata=metadata(1))
+    t_sw_ipt_times_supported: int = field(metadata=metadata(1))
+    rtt_2m_aa_only_n: int = field(metadata=metadata(1))
+    rtt_2m_sounding_n: int = field(metadata=metadata(1))
+    rtt_2m_random_sequence_n: int = field(metadata=metadata(1))
 
 
 @HCI_SyncCommand.sync_command(
@@ -7330,7 +7334,8 @@ class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event(HCI_LE_Meta
     See Bluetooth spec @ 7.7.65.65 LE CS Read Remote Supported Capabilities
     Complete V2 event (subevent 0x38). Emitted (instead of the 6.0 variant
     0x2C) when the LE Extended Feature Set has been negotiated on the link.
-    Adds T_IP2_IPT and T_SW_IPT timings for Inline PCT.
+    Adds the T_IP2_IPT and T_SW_IPT timings for Inline PCT plus the 2M RTT
+    sequence lengths.
     '''
 
     status: int = field(metadata=metadata(STATUS_SPEC))
@@ -7356,7 +7361,10 @@ class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event(HCI_LE_Meta
     t_sw_time_supported: int = field(metadata=metadata(1))
     tx_snr_capability: int = field(metadata=metadata(CS_SNR_SPEC))
     t_ip2_ipt_times_supported: int = field(metadata=metadata(2))
-    t_sw_ipt_time_supported: int = field(metadata=metadata(1))
+    t_sw_ipt_times_supported: int = field(metadata=metadata(1))
+    rtt_2m_aa_only_n: int = field(metadata=metadata(1))
+    rtt_2m_sounding_n: int = field(metadata=metadata(1))
+    rtt_2m_random_sequence_n: int = field(metadata=metadata(1))
 
 
 # -----------------------------------------------------------------------------
