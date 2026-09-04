@@ -16,6 +16,8 @@
 # Imports
 # -----------------------------------------------------------------------------
 
+from typing_extensions import assert_type
+
 from bumble.core import (
     UUID,
     AdvertisingData,
@@ -47,6 +49,18 @@ def test_ad_data():
         bytes([123]),
         bytes([234]),
     ]
+
+
+# -----------------------------------------------------------------------------
+def test_ad_data_legacy_constants_pick_the_same_overload() -> None:
+    # Annotated so that mypy checks the body. The forwarded constants must keep
+    # their literal type, or no Literal[Type...] overload of get()/get_all()
+    # matches them and the return type widens to AdvertisingDataObject.
+    ad = AdvertisingData.from_bytes(bytes([2, AdvertisingData.TX_POWER_LEVEL, 123]))
+    assert_type(ad.get(AdvertisingData.TX_POWER_LEVEL), int | None)
+    assert_type(ad.get(AdvertisingData.Type.TX_POWER_LEVEL), int | None)
+    assert_type(ad.get_all(AdvertisingData.COMPLETE_LOCAL_NAME), list[str])
+    assert ad.get(AdvertisingData.TX_POWER_LEVEL) == 123
 
 
 # -----------------------------------------------------------------------------
