@@ -1213,9 +1213,8 @@ class ChannelSoundingCapabilities:
     ) -> ChannelSoundingCapabilities:
         """Build capabilities from either the 6.0 or the 6.3 [v2] HCI payload.
 
-        The V2 shapes rename rtt_random_sequence_n to rtt_random_payload_n and
-        append the Inline PCT timings and 2M RTT sequence lengths; everything
-        else is common to all four.
+        The V2 shapes append the Inline PCT timings and the 2M RTT sequence
+        lengths; every other parameter is common to all four.
         """
         v2_tail: dict[str, int] = {}
         if isinstance(
@@ -1223,7 +1222,6 @@ class ChannelSoundingCapabilities:
             hci.HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters
             | hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event,
         ):
-            rtt_random_sequence_n = report.rtt_random_payload_n
             v2_tail = {
                 't_ip2_ipt_times_supported': report.t_ip2_ipt_times_supported,
                 't_sw_ipt_times_supported': report.t_sw_ipt_times_supported,
@@ -1231,8 +1229,6 @@ class ChannelSoundingCapabilities:
                 'rtt_2m_sounding_n': report.rtt_2m_sounding_n,
                 'rtt_2m_random_sequence_n': report.rtt_2m_random_sequence_n,
             }
-        else:
-            rtt_random_sequence_n = report.rtt_random_sequence_n
 
         return cls(
             num_config_supported=report.num_config_supported,
@@ -1244,7 +1240,7 @@ class ChannelSoundingCapabilities:
             rtt_capability=report.rtt_capability,
             rtt_aa_only_n=report.rtt_aa_only_n,
             rtt_sounding_n=report.rtt_sounding_n,
-            rtt_random_sequence_n=rtt_random_sequence_n,
+            rtt_random_sequence_n=report.rtt_random_sequence_n,
             nadm_sounding_capability=report.nadm_sounding_capability,
             nadm_random_capability=report.nadm_random_capability,
             cs_sync_phys_supported=report.cs_sync_phys_supported,
@@ -6898,27 +6894,12 @@ class Device(utils.CompositeEventEmitter):
 
     @host_event_handler
     def on_cs_remote_supported_capabilities(
-        self, event: hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_Event
-    ):
-        self._on_cs_remote_supported_capabilities_impl(event)
-
-    @host_event_handler
-    def on_cs_remote_supported_capabilities_v2(
-        self,
-        event: hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event,
-    ):
-        # 6.3 variant with T_IP2_IPT_Times and T_SW_IPT_Time appended.
-        # Fed through the same builder so downstream code doesn't care which
-        # HCI event landed.
-        self._on_cs_remote_supported_capabilities_impl(event)
-
-    def _on_cs_remote_supported_capabilities_impl(
         self,
         event: (
             hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_Event
             | hci.HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event
         ),
-    ) -> None:
+    ):
         if not (connection := self.lookup_connection(event.connection_handle)):
             return
 
