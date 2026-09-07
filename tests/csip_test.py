@@ -110,6 +110,73 @@ async def test_csis(sirk_type):
 
 
 # -----------------------------------------------------------------------------
+@pytest.mark.asyncio
+async def test_coordinated_set_name():
+    SIRK = bytes.fromhex('2f62c8ae41867d1bb619e788a2605faa')
+    LTK = bytes.fromhex('2f62c8ae41867d1bb619e788a2605faa')
+    SET_NAME = 'My Earbuds'
+
+    devices = TwoDevices()
+    devices[0].add_service(
+        csip.CoordinatedSetIdentificationService(
+            set_identity_resolving_key=SIRK,
+            set_identity_resolving_key_type=csip.SirkType.PLAINTEXT,
+            coordinated_set_name=SET_NAME,
+        )
+    )
+
+    await devices.setup_connection()
+
+    # Mock encryption.
+    devices.connections[0].encryption = 1
+    devices.connections[1].encryption = 1
+    devices[0].get_long_term_key = mock.AsyncMock(return_value=LTK)
+    devices[1].get_long_term_key = mock.AsyncMock(return_value=LTK)
+
+    peer = device.Peer(devices.connections[1])
+    csis_client = await peer.discover_service_and_create_proxy(
+        csip.CoordinatedSetIdentificationProxy
+    )
+
+    # Verify the optional Coordinated Set Name characteristic is present and readable.
+    assert csis_client.coordinated_set_name is not None
+    name_bytes = await csis_client.coordinated_set_name.read_value()
+    assert name_bytes.decode('utf-8') == SET_NAME
+
+
+# -----------------------------------------------------------------------------
+@pytest.mark.asyncio
+async def test_coordinated_set_name_optional():
+    '''Coordinated Set Name is optional: omitting it should leave the proxy attribute as None.'''
+    SIRK = bytes.fromhex('2f62c8ae41867d1bb619e788a2605faa')
+    LTK = bytes.fromhex('2f62c8ae41867d1bb619e788a2605faa')
+
+    devices = TwoDevices()
+    devices[0].add_service(
+        csip.CoordinatedSetIdentificationService(
+            set_identity_resolving_key=SIRK,
+            set_identity_resolving_key_type=csip.SirkType.PLAINTEXT,
+        )
+    )
+
+    await devices.setup_connection()
+
+    # Mock encryption.
+    devices.connections[0].encryption = 1
+    devices.connections[1].encryption = 1
+    devices[0].get_long_term_key = mock.AsyncMock(return_value=LTK)
+    devices[1].get_long_term_key = mock.AsyncMock(return_value=LTK)
+
+    peer = device.Peer(devices.connections[1])
+    csis_client = await peer.discover_service_and_create_proxy(
+        csip.CoordinatedSetIdentificationProxy
+    )
+
+    # Coordinated Set Name was not provided, so the proxy attribute should be None.
+    assert csis_client.coordinated_set_name is None
+
+
+# -----------------------------------------------------------------------------
 async def run():
     test_sih()
     await test_csis()

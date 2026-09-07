@@ -205,6 +205,7 @@ GATT_SET_IDENTITY_RESOLVING_KEY_CHARACTERISTIC  = UUID.from_16_bits(0x2B84, 'Set
 GATT_COORDINATED_SET_SIZE_CHARACTERISTIC        = UUID.from_16_bits(0x2B85, 'Coordinated Set Size')
 GATT_SET_MEMBER_LOCK_CHARACTERISTIC             = UUID.from_16_bits(0x2B86, 'Set Member Lock')
 GATT_SET_MEMBER_RANK_CHARACTERISTIC             = UUID.from_16_bits(0x2B87, 'Set Member Rank')
+GATT_COORDINATED_SET_NAME_CHARACTERISTIC        = UUID.from_16_bits(0x2C1A, 'Coordinated Set Name')
 
 # Media Control Service (MCS)
 GATT_MEDIA_PLAYER_NAME_CHARACTERISTIC                     = UUID.from_16_bits(0x2B93, 'Media Player Name')
