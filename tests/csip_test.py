@@ -23,7 +23,7 @@ from unittest import mock
 
 import pytest
 
-from bumble import device
+from bumble import core, device
 from bumble.profiles import csip
 from bumble.testing.test_utils import TwoDevices
 
@@ -174,6 +174,29 @@ async def test_coordinated_set_name_optional():
 
     # Coordinated Set Name was not provided, so the proxy attribute should be None.
     assert csis_client.coordinated_set_name is None
+
+
+# -----------------------------------------------------------------------------
+def test_coordinated_set_name_max_length():
+    '''Coordinated Set Name is limited to 128 octets as UTF-8.'''
+    SIRK = bytes.fromhex('2f62c8ae41867d1bb619e788a2605faa')
+
+    # A 128-character ASCII string encodes to exactly 128 octets (within limit).
+    valid_name = 'a' * 128
+    service = csip.CoordinatedSetIdentificationService(
+        set_identity_resolving_key=SIRK,
+        set_identity_resolving_key_type=csip.SirkType.PLAINTEXT,
+        coordinated_set_name=valid_name,
+    )
+    assert service.coordinated_set_name_characteristic is not None
+
+    # A 129-character ASCII string encodes to 129 octets (over the limit).
+    with pytest.raises(core.InvalidArgumentError):
+        csip.CoordinatedSetIdentificationService(
+            set_identity_resolving_key=SIRK,
+            set_identity_resolving_key_type=csip.SirkType.PLAINTEXT,
+            coordinated_set_name='a' * 129,
+        )
 
 
 # -----------------------------------------------------------------------------

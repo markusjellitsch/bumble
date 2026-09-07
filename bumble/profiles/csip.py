@@ -27,6 +27,7 @@ from bumble import core, crypto, device, gatt, gatt_client
 # Constants
 # -----------------------------------------------------------------------------
 SET_IDENTITY_RESOLVING_KEY_LENGTH = 16
+COORDINATED_SET_NAME_MAX_LENGTH = 128
 
 
 class SirkType(enum.IntEnum):
@@ -160,12 +161,18 @@ class CoordinatedSetIdentificationService(gatt.TemplateService):
             characteristics.append(self.set_member_rank_characteristic)
 
         if coordinated_set_name is not None:
+            name_bytes = coordinated_set_name.encode('utf-8')
+            if len(name_bytes) > COORDINATED_SET_NAME_MAX_LENGTH:
+                raise core.InvalidArgumentError(
+                    f'Coordinated Set Name is {len(name_bytes)} octets, '
+                    f'maximum is {COORDINATED_SET_NAME_MAX_LENGTH}'
+                )
             self.coordinated_set_name_characteristic = gatt.Characteristic(
                 uuid=gatt.GATT_COORDINATED_SET_NAME_CHARACTERISTIC,
                 properties=gatt.Characteristic.Properties.READ
                 | gatt.Characteristic.Properties.NOTIFY,
                 permissions=gatt.Characteristic.Permissions.READ_REQUIRES_ENCRYPTION,
-                value=coordinated_set_name.encode('utf-8'),
+                value=name_bytes,
             )
             characteristics.append(self.coordinated_set_name_characteristic)
 
