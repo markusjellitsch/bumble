@@ -380,6 +380,7 @@ HCI_LE_MONITORED_ADVERTISERS_REPORT_EVENT                   = 0x34
 HCI_LE_FRAME_SPACE_UPDATE_COMPLETE_EVENT                    = 0x35
 HCI_LE_UTP_RECEIVE_EVENT                                    = 0x36
 HCI_LE_CONNECTION_RATE_CHANGE_EVENT                         = 0x37
+HCI_LE_CS_READ_REMOTE_SUPPORTED_CAPABILITIES_COMPLETE_V2_EVENT = 0x38
 
 
 # HCI Command
@@ -709,6 +710,9 @@ HCI_LE_CS_SET_PROCEDURE_PARAMETERS_COMMAND                               = hci_c
 HCI_LE_CS_PROCEDURE_ENABLE_COMMAND                                       = hci_command_op_code(0x08, 0x0094)
 HCI_LE_CS_TEST_COMMAND                                                   = hci_command_op_code(0x08, 0x0095)
 HCI_LE_CS_TEST_END_COMMAND                                               = hci_command_op_code(0x08, 0x0096)
+# Bluetooth 6.3 CS Enhancements (Inline PCT) — opcodes 0x20A5 / 0x20A6.
+HCI_LE_CS_READ_LOCAL_SUPPORTED_CAPABILITIES_V2_COMMAND                   = hci_command_op_code(0x08, 0x00A5)
+HCI_LE_CS_WRITE_CACHED_REMOTE_SUPPORTED_CAPABILITIES_V2_COMMAND          = hci_command_op_code(0x08, 0x00A6)
 HCI_LE_SET_HOST_FEATURE_V2_COMMAND                                       = hci_command_op_code(0x08, 0x0097)
 HCI_LE_ADD_DEVICE_TO_MONITORED_ADVERTISERS_LIST_COMMAND                  = hci_command_op_code(0x08, 0x0098)
 HCI_LE_REMOVE_DEVICE_FROM_MONITORED_ADVERTISERS_LIST_COMMAND             = hci_command_op_code(0x08, 0x0099)
@@ -973,6 +977,20 @@ class CsSubeventAbortReason(SpecableEnum):
     SCHEDULING_CONFLICT_OR_LIMITED_RESOURCES = 0x03
     UNSPECIFIED = 0x0F
 
+
+# Bluetooth 6.3 CS Enhancements — bits inside the 2-byte `subfeatures_supported`
+# field of the CS Read (Local|Remote) Supported Capabilities V2 reply. Mirrors
+# BT_HCI_LE_CS_SUBFEATURE_* masks from Nordic hci_types.h:3934.
+class CsSubfeature(enum.IntFlag):
+    CS_IPT_REFLECTOR = 1 << 4   # Inline PCT capable as reflector
+
+
+# Values for the `cs_enhancements` byte of HCI_LE_CS_Create_Config command.
+# See Bluetooth spec @ 7.8.137: bit 0 enables IPT in the CS reflector; the
+# other bits are reserved.
+class CsEnhancements(enum.IntFlag):
+    INLINE_PCT = 0x01
+
 class Role(SpecableEnum):
     CENTRAL    = 0
     PERIPHERAL = 1
@@ -1188,6 +1206,10 @@ HCI_SUPPORTED_COMMANDS_MASKS = {
     HCI_LE_CS_READ_LOCAL_SUPPORTED_CAPABILITIES_COMMAND                       : 1 << (20*8+5),
     HCI_LE_CS_READ_REMOTE_SUPPORTED_CAPABILITIES_COMMAND                      : 1 << (20*8+6),
     HCI_LE_CS_WRITE_CACHED_REMOTE_SUPPORTED_CAPABILITIES_COMMAND              : 1 << (20*8+7),
+    # Bluetooth 6.3 LE Extended Feature Set — CS V2 read of local supported
+    # capabilities. Per Nordic hci_types.h:2609: BT_CMD_TEST(cmd, 49, 2)
+    # → octet 49, bit 2 of the LE Supported Commands bitmap.
+    HCI_LE_CS_READ_LOCAL_SUPPORTED_CAPABILITIES_V2_COMMAND                    : 1 << (49*8+2),
     HCI_SET_EVENT_MASK_PAGE_2_COMMAND                                         : 1 << (22*8+2),
     HCI_READ_FLOW_CONTROL_MODE_COMMAND                                        : 1 << (23*8+0),
     HCI_WRITE_FLOW_CONTROL_MODE_COMMAND                                       : 1 << (23*8+1),
@@ -5998,6 +6020,58 @@ class HCI_LE_CS_Read_Local_Supported_Capabilities_Command(
 
 
 # -----------------------------------------------------------------------------
+# Bluetooth 6.3 LE Extended Feature Set — CS Enhancements (V2 variant).
+# Adds the Inline PCT (IPT) timings and the 2M RTT sequence lengths after
+# tx_snr_capability. Opcode 0x20A5. See Bluetooth spec @ 7.8.130 for the
+# parameter list.
+# -----------------------------------------------------------------------------
+@dataclasses.dataclass
+class HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters(
+    HCI_StatusReturnParameters
+):
+    num_config_supported: int = field(metadata=metadata(1))
+    max_consecutive_procedures_supported: int = field(metadata=metadata(2))
+    num_antennas_supported: int = field(metadata=metadata(1))
+    max_antenna_paths_supported: int = field(metadata=metadata(1))
+    roles_supported: int = field(metadata=metadata(1))
+    modes_supported: int = field(metadata=metadata(1))
+    rtt_capability: int = field(metadata=metadata(1))
+    rtt_aa_only_n: int = field(metadata=metadata(1))
+    rtt_sounding_n: int = field(metadata=metadata(1))
+    rtt_random_sequence_n: int = field(metadata=metadata(1))
+    nadm_sounding_capability: int = field(metadata=metadata(2))
+    nadm_random_capability: int = field(metadata=metadata(2))
+    cs_sync_phys_supported: int = field(metadata=metadata(CS_SYNC_PHY_SUPPORTED_SPEC))
+    subfeatures_supported: int = field(metadata=metadata(2))
+    t_ip1_times_supported: int = field(metadata=metadata(2))
+    t_ip2_times_supported: int = field(metadata=metadata(2))
+    t_fcs_times_supported: int = field(metadata=metadata(2))
+    t_pm_times_supported: int = field(metadata=metadata(2))
+    t_sw_time_supported: int = field(metadata=metadata(1))
+    tx_snr_capability: int = field(metadata=metadata(CS_SNR_SPEC))
+    # V2 tail.
+    t_ip2_ipt_times_supported: int = field(metadata=metadata(2))
+    t_sw_ipt_times_supported: int = field(metadata=metadata(1))
+    rtt_2m_aa_only_n: int = field(metadata=metadata(1))
+    rtt_2m_sounding_n: int = field(metadata=metadata(1))
+    rtt_2m_random_sequence_n: int = field(metadata=metadata(1))
+
+
+@HCI_SyncCommand.sync_command(
+    HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters
+)
+@dataclasses.dataclass
+class HCI_LE_CS_Read_Local_Supported_Capabilities_V2_Command(
+    HCI_SyncCommand[HCI_LE_CS_Read_Local_Supported_Capabilities_V2_ReturnParameters]
+):
+    '''
+    See Bluetooth spec @ 7.8.130 LE CS Read Local Supported Capabilities
+    command [v2] (opcode 0x20A5). Introduced with LE Extended Feature Set /
+    CS Enhancements to report Inline PCT (IPT) timing capabilities.
+    '''
+
+
+# -----------------------------------------------------------------------------
 @HCI_Command.command
 @dataclasses.dataclass
 class HCI_LE_CS_Read_Remote_Supported_Capabilities_Command(HCI_AsyncCommand):
@@ -6126,7 +6200,10 @@ class HCI_LE_CS_Create_Config_Command(HCI_AsyncCommand):
     channel_selection_type: int = field(metadata=ChannelSelectionType.type_metadata(1))
     ch3c_shape: int = field(metadata=Ch3cShape.type_metadata(1))
     ch3c_jump: int = field(metadata=metadata(1))
-    reserved: int = field(metadata=metadata(1))
+    # Bluetooth 6.3 CS Enhancements — last byte of the command was called
+    # "reserved" pre-6.3. Bit 0 (`CsEnhancements.INLINE_PCT`) enables IPT in
+    # the CS reflector. Set to zero for 6.0 behavior.
+    cs_enhancements: int = field(metadata=metadata(1))
 
 
 # -----------------------------------------------------------------------------
@@ -7247,6 +7324,47 @@ class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_Event(HCI_LE_Meta_Ev
     t_pm_times_supported: int = field(metadata=metadata(2))
     t_sw_time_supported: int = field(metadata=metadata(1))
     tx_snr_capability: int = field(metadata=metadata(CS_SNR_SPEC))
+
+
+# -----------------------------------------------------------------------------
+@HCI_LE_Meta_Event.event
+@dataclasses.dataclass
+class HCI_LE_CS_Read_Remote_Supported_Capabilities_Complete_V2_Event(HCI_LE_Meta_Event):
+    '''
+    See Bluetooth spec @ 7.7.65.39 LE CS Read Remote Supported Capabilities
+    Complete event [v2] (subevent 0x38). Emitted (instead of the 6.0 variant
+    0x2C) when the LE Extended Feature Set has been negotiated on the link.
+    Adds the T_IP2_IPT and T_SW_IPT timings for Inline PCT plus the 2M RTT
+    sequence lengths.
+    '''
+
+    status: int = field(metadata=metadata(STATUS_SPEC))
+    connection_handle: int = field(metadata=metadata(2))
+    num_config_supported: int = field(metadata=metadata(1))
+    max_consecutive_procedures_supported: int = field(metadata=metadata(2))
+    num_antennas_supported: int = field(metadata=metadata(1))
+    max_antenna_paths_supported: int = field(metadata=metadata(1))
+    roles_supported: int = field(metadata=metadata(1))
+    modes_supported: int = field(metadata=metadata(1))
+    rtt_capability: int = field(metadata=metadata(1))
+    rtt_aa_only_n: int = field(metadata=metadata(1))
+    rtt_sounding_n: int = field(metadata=metadata(1))
+    rtt_random_sequence_n: int = field(metadata=metadata(1))
+    nadm_sounding_capability: int = field(metadata=metadata(2))
+    nadm_random_capability: int = field(metadata=metadata(2))
+    cs_sync_phys_supported: int = field(metadata=metadata(CS_SYNC_PHY_SUPPORTED_SPEC))
+    subfeatures_supported: int = field(metadata=metadata(2))
+    t_ip1_times_supported: int = field(metadata=metadata(2))
+    t_ip2_times_supported: int = field(metadata=metadata(2))
+    t_fcs_times_supported: int = field(metadata=metadata(2))
+    t_pm_times_supported: int = field(metadata=metadata(2))
+    t_sw_time_supported: int = field(metadata=metadata(1))
+    tx_snr_capability: int = field(metadata=metadata(CS_SNR_SPEC))
+    t_ip2_ipt_times_supported: int = field(metadata=metadata(2))
+    t_sw_ipt_times_supported: int = field(metadata=metadata(1))
+    rtt_2m_aa_only_n: int = field(metadata=metadata(1))
+    rtt_2m_sounding_n: int = field(metadata=metadata(1))
+    rtt_2m_random_sequence_n: int = field(metadata=metadata(1))
 
 
 # -----------------------------------------------------------------------------
