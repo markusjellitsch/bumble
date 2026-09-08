@@ -22,6 +22,7 @@ import enum
 import struct
 
 from bumble import core, crypto, device, gatt, gatt_client
+from bumble.gatt_adapters import UTF8CharacteristicProxyAdapter
 
 # -----------------------------------------------------------------------------
 # Constants
@@ -219,7 +220,7 @@ class CoordinatedSetIdentificationProxy(gatt_client.ProfileServiceProxy):
     coordinated_set_size: gatt_client.CharacteristicProxy[bytes] | None = None
     set_member_lock: gatt_client.CharacteristicProxy[bytes] | None = None
     set_member_rank: gatt_client.CharacteristicProxy[bytes] | None = None
-    coordinated_set_name: gatt_client.CharacteristicProxy[bytes] | None = None
+    coordinated_set_name: UTF8CharacteristicProxyAdapter | None = None
 
     def __init__(self, service_proxy: gatt_client.ServiceProxy) -> None:
         self.service_proxy = service_proxy
@@ -246,7 +247,9 @@ class CoordinatedSetIdentificationProxy(gatt_client.ProfileServiceProxy):
         if characteristics := service_proxy.get_characteristics_by_uuid(
             gatt.GATT_COORDINATED_SET_NAME_CHARACTERISTIC
         ):
-            self.coordinated_set_name = characteristics[0]
+            self.coordinated_set_name = UTF8CharacteristicProxyAdapter(
+                characteristics[0]
+            )
 
     async def read_set_identity_resolving_key(self) -> tuple[SirkType, bytes]:
         '''Reads SIRK and decrypts if encrypted.'''

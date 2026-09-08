@@ -140,8 +140,8 @@ async def test_coordinated_set_name():
 
     # Verify the optional Coordinated Set Name characteristic is present and readable.
     assert csis_client.coordinated_set_name is not None
-    name_bytes = await csis_client.coordinated_set_name.read_value()
-    assert name_bytes.decode('utf-8') == SET_NAME
+    name = await csis_client.coordinated_set_name.read_value()
+    assert name == SET_NAME
 
 
 # -----------------------------------------------------------------------------
